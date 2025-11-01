@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 
 	"github.com/NoamFav/AutoSort/internal/llm"
 )
@@ -33,4 +34,27 @@ func main() {
 
 	response := llm.LlmQuery("Reorganize...: " + string(out))
 	os.WriteFile("autosort_suggestion.md", []byte(response), 0644)
+
+	commands := llm.LlmQuery("Based on this file structure and plan, generate only the bash script to reorganize the folders. Do not include any explanation, markdown formatting, or text. ONLY return raw bash commands:\n\n" + string(out) + "\n\n" + response)
+	if strings.Contains(commands, "rm ") || strings.Contains(commands, ":(){") {
+		fmt.Println(" Dangerous commands detected in output. Not saving.")
+		return
+	}
+	start := strings.Index(commands, "#!/bin/bash")
+	if start == -1 {
+		fmt.Println("No bash script found in output")
+		return
+	}
+	script := commands[start:]
+	os.WriteFile("commands.sh", []byte(script), 0755)
+	os.Chmod("commands.sh", 0755)
+	fmt.Print("Run the generated script? (y/N): ")
+	var resp string
+	fmt.Scanln(&resp)
+	if strings.ToLower(resp) == "y" {
+		cmd := exec.Command("bash", "commands.sh")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		cmd.Run()
+	}
 }
