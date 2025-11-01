@@ -35,7 +35,8 @@ func main() {
 	response := llm.LlmQuery("Reorganize...: " + string(out))
 	os.WriteFile("autosort_suggestion.md", []byte(response), 0644)
 
-	commands := llm.LlmQuery("Based on this file structure and plan, generate only the bash script to reorganize the folders. Do not include any explanation, markdown formatting, or text. ONLY return raw bash commands:\n\n" + string(out) + "\n\n" + response)
+	prompt := "Give me only the bash commands to restructure the following tree. Start with '#!/bin/bash' and output ONLY code, no comments, markdown, or explanations. Absolutely no text outside the bash script:\n\n" + string(out) + "\n\n" + response
+	commands := llm.LlmQuery(prompt)
 	if strings.Contains(commands, "rm ") || strings.Contains(commands, ":(){") {
 		fmt.Println(" Dangerous commands detected in output. Not saving.")
 		return
