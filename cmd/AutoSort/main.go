@@ -46,7 +46,22 @@ func main() {
 		fmt.Println("No bash script found in output")
 		return
 	}
-	script := commands[start:]
+
+	end := len(commands)
+	if idx := strings.LastIndex(commands, "```"); idx != -1 && idx > start {
+		end = idx
+	}
+
+	script := commands[start:end]
+
+	if err := os.WriteFile("commands.sh", []byte(script), 0755); err != nil {
+		fmt.Println("Error writing script:", err)
+		return
+	}
+	if err := os.Chmod("commands.sh", 0755); err != nil {
+		fmt.Println("Error chmod script:", err)
+		return
+	}
 	os.WriteFile("commands.sh", []byte(script), 0755)
 	os.Chmod("commands.sh", 0755)
 	fmt.Print("Run the generated script? (y/N): ")
