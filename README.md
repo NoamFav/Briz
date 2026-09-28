@@ -7,7 +7,7 @@
 <br>
 
 [![Go](https://img.shields.io/badge/Go-1.25+-00ADD8?style=for-the-badge&logo=go&logoColor=white&labelColor=0D1117)](https://go.dev)
-[![License](https://img.shields.io/badge/MIT-00D9FF?style=for-the-badge&labelColor=0D1117)](./LICENSE)
+[![License](https://img.shields.io/badge/Apache%202.0-00D9FF?style=for-the-badge&labelColor=0D1117)](./LICENSE)
 
 </div>
 
@@ -62,7 +62,7 @@ briz ~/Downloads             # apply it
 
 <br>
 
-Made with ♥ by [NoamFav](https://github.com/NoamFav) · MIT License
+Made with ♥ by [NoamFav](https://github.com/NoamFav) · Apache 2.0
 
 <img src="https://capsule-render.vercel.app/api?type=waving&height=100&color=gradient&customColorList=12&section=footer" />
 
